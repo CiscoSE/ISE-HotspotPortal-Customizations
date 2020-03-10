@@ -1,0 +1,128 @@
+<script>
+/*
+Copyright (c) 2019 Cisco and/or its affiliates.
+
+This software is licensed to you under the terms of the Cisco Sample
+Code License, Version 1.1 (the "License"). You may obtain a copy of the
+License at
+
+			   https://developer.cisco.com/docs/licenses
+
+All use of the material herein must be in accordance with the terms of
+the License. All rights not expressly granted by the License are
+reserved. Unless required by applicable law or agreed to separately in
+writing, software distributed under the License is distributed on an "AS
+IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied.
+*/	
+	function loadAUP() {
+		//AUP Dialog Header Text
+		var aupHeaderTitle = "Terms &amp; Conditions";
+		
+		//Grab AUP data from existing field		
+		$("#auptext").html($(".cisco-ise-aup-text").html());
+		
+		//Set window Modal to display
+		$("#windowModal").css({'display': 'block', opacity: 0.7, 'width':$(document).width(),'height':$(document).height()});
+		
+		//Hide Body Overflow
+		$("body").css({'overflow':'hidden'});
+		
+		//Set the Dialog Header Text
+		$("#aupheader").html('<h1><b>' + aupHeaderTitle + '</b></h1>');
+		
+		//Set the Dialog box to Display
+		$("#aupdialog").css({'display': 'grid'});
+		
+		//Set Click handler to close dialog
+		$("#aupdialog").click( function() {
+			$(this).css('display', 'none');
+			$('#windowModal').css('display', 'none')}
+		);
+		
+		//Set Click handler to close dialog
+		$("#windowModal").click( function() {
+			$(this).css('display', 'none');
+			$('#aupdialog').css('display', 'none')}
+		);
+	}	
+
+	function loadSecondaryPortal() {
+		//Setup Variables to gather URL String GET Parameters
+		const getString = window.location.search;
+		var getParams = new URLSearchParams(getString);
+		var sessionId = getParams.get('sessionId');
+		
+		//Update this with the Portal ID you want to redirect to.
+		//portalId Format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+		//--------------------------
+		const portalId = "";
+		//Redirect to secondary portal
+		window.location.href = window.location.protocol + "//" + window.location.host + "/portal/gateway?sessionId=" + sessionId + "&portal=" + portalId + "&action=cwa";
+	}
+	
+	$(window).ready(function() {
+		//Prepend AUP Dialog components into Document Body
+		$("body").prepend('<div id="aupdialog"><div id="aupheader"></div><div id="auptext"></div></div><div id="windowModal"></div>');
+		
+		//Hide eisting AUP Text
+		$(".cisco-ise-aup-text").css("display","none");
+		
+		//Hide the Decline Button
+		$("#ui_aup_decline_button").parent().css("display","none");
+		
+		//Add AUP Link to the document
+		$(".two-button-layout").before('<center><a onclick="loadAUP()" class="ui-link">Please read the terms and conditions.</a></center>');
+		
+		//Set Margin for centering element on page
+		$("#aupdialog").css({'margin-left':'-' + ($("#aupdialog").width()/2) + 'px'});
+		
+	});
+
+	$(window).resize(function() {
+		if($("#windowModal").css('display') = "block"){
+			$("#windowModal").css({'display': 'block', opacity: 0.7, 'width':$(document).width(),'height':$(document).height()});
+		}
+		
+		$("#aupdialog").css({'margin-left':'-' + ($("#aupdialog").width()/2) + 'px'});
+				
+	});
+</script><style>
+	#aupdialog {
+		background: #fff; 
+		max-width: 650px; 
+		width: 90%; 
+		height: 80%; 
+		text-align: center; 
+		position: absolute; 
+		margin-left: -45%; 
+		margin-top: 0px; 
+		left: 50%; 
+		top: 10%; 
+		z-index: 20; 
+		border-radius: 10px;
+		padding: 8px;
+		display: none;
+	}
+	
+	#aupheader {
+		background: #fff;
+		width: 100%;
+		height 30px;
+	}
+	
+	#auptext {
+		overflow: auto;
+		margin: 5px;
+		padding: 2px;
+		border: black solid 1px;
+	}
+
+	#windowModal {
+		z-index: 19; 
+		position: absolute; 
+		left: 0; 
+		top: 0; 
+		background: #000;
+	}
+</style>
